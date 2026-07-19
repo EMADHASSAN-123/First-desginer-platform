@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة المصمم الأول - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        
+        <aside class="sidebar right-sidebar" id="sidebarRight">
+            <div class="brand">
+                <i class="fas fa-layer-group brand-icon"></i>
+                <h2>منصة المصمم الأول</h2>
+            </div>
+            <nav class="side-nav">
+    <ul id="navMenu">
+        <li class="active" data-target="home-section"><i class="fas fa-home"></i> الرئيسية</li>
+        <li data-target="folders-section"><i class="fas fa-folder"></i> الملفات</li>
+        <li data-target="projects-section"><i class="fas fa-project-diagram"></i> المشاريع</li>
+        <li data-target="sales-section"><i class="fas fa-shopping-cart"></i> المبيعات</li>
+        <li data-target="stats-section"><i class="fas fa-chart-bar"></i> الإحصائيات</li>
+        <li data-target="community-section"><i class="fas fa-users"></i> المجتمع</li>
+        <li data-target="accounts-section"><i class="fas fa-user-circle"></i> الحسابات</li>
+        <li data-target="notifications-section"><i class="fas fa-bell"></i> الإشعارات</li>
+        <li data-target="messages-section"><i class="fas fa-envelope"></i> الرسائل</li>
+        <li data-target="settings-section"><i class="fas fa-cog"></i> الإعدادات</li>
+    </ul>
+</nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+                <div class="upgrade-card">
+                    <i class="fas fa-crown"></i> اشترك الآن
+                </div>
+            </div>
+        </aside>
+
+        <!-- <nav class="side-nav">
+        <ul id="navMenu">
+            <li class="active" data-target="home-section"><i class="fas fa-home"></i> الرئيسية</li>
+            <li data-target="upload-section"><i class="fas fa-folder"></i> الملفات</li>
+            <li><i class="fas fa-project-diagram"></i> المشاريع</li>
+            <li><i class="fas fa-shopping-cart"></i> المبيعات</li>
+        </ul>
+        </nav> -->
+
+<main class="main-workspace">
+    
+    <header class="top-nav dynamic-top-nav">
+        <button class="burger-btn" id="burgerBtn"><i class="fas fa-bars"></i></button>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="بحث...">
+        </div>
+        
+        <div class="nav-tools-right">
+            <button class="header-upload-btn"><i class="fas fa-upload"></i> رفع ملف جديد</button>
+            <i class="fas fa-shopping-cart icon-btn"></i>
+            <i class="fas fa-envelope icon-btn"></i>
+            <i class="fas fa-bell icon-btn"></i>
+            <div class="header-user-profile">
+                <div class="user-text">
+                    <span class="u-name">الاسم</span>
+                    <span class="u-title">مصمم جرافيك</span>
+                </div>
+                <div class="u-avatar"></div>
+            </div>
+        </div>
+    </header>
+
+    <div id="home-section" class="content-section active">
+        
+        <div class="profile-banner">
+            <div class="level-box">
+                <span class="level-title">المستوى الحالي</span>
+                <h3 class="level-name">مصمم مبتدئ</h3>
+                <span class="level-badge-small">المستوى 1</span>
+                <div class="level-icon-wrapper">
+                    <i class="fas fa-certificate level-star"></i>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 5%;"></div>
+                </div>
+                <span class="progress-text">0.000 / 10000 <span class="align-left">الوصول إلى مستوى خبير</span></span>
+            </div>
+
+            <div class="user-details-box">
+                <h2 class="main-name">الاسم <span class="edit-icon"><i class="fas fa-pen"></i></span></h2>
+                <div class="sub-info">
+                    <span>مصمم جرافيك</span> • 
+                    <span><i class="fas fa-calendar-alt"></i> عضو منذ 2023 يناير</span> • 
+                    <span><i class="fas fa-map-marker-alt"></i> اليمن - تعز</span>
+                </div>
+                <p class="bio-text">أحب تصميم الشعارات والهويات البصرية والتصاميم الإعلانية<br>خبرة أكثر من 3 سنوات في مجال التصميم.</p>
+                <div class="profile-actions">
+                    <button class="action-btn outline-btn"><i class="fas fa-eye"></i> عرض الملف العام</button>
+                    <button class="action-btn outline-btn"><i class="fas fa-pen"></i> تعديل الملف الشخصي</button>
+                    <button class="icon-circle"><i class="fas fa-link"></i></button>
+                    <button class="icon-circle"><i class="fas fa-share-alt"></i></button>
+                </div>
+            </div>
+
+            <div class="user-image-box">
+                <div class="image-placeholder">الصورة</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-red"><i class="fas fa-folder"></i></div>
+                <div class="stat-info">
+                    <p>إجمالي الملفات</p>
+                    <h3>0.00</h3>
+                    <small>مدفوع 0.0 مجانية</small>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-purple"><i class="fas fa-shopping-cart"></i></div>
+                <div class="stat-info">
+                    <p>إجمالي المبيعات</p>
+                    <h3>0.00</h3>
+                    <small class="text-green"><i class="fas fa-arrow-up"></i> هذا الشهر 0%</small>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green"><i class="fas fa-dollar-sign"></i></div>
+                <div class="stat-info">
+                    <p>إجمالي الأرباح</p>
+                    <h3>$0.00</h3>
+                    <small class="text-green"><i class="fas fa-arrow-up"></i> هذا الشهر 0%</small>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-yellow"><i class="fas fa-download"></i></div>
+                <div class="stat-info">
+                    <p>إجمالي التحميلات</p>
+                    <h3>0.000</h3>
+                    <small class="text-green"><i class="fas fa-arrow-up"></i> هذا الشهر 0%</small>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-blue"><i class="fas fa-star"></i></div>
+                <div class="stat-info">
+                    <p>متوسط التقييم</p>
+                    <h3>0.0</h3>
+                    <small class="text-yellow"><i class="fas fa-star"></i> من 0</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-split-layout">
+            <div class="files-tab-section card-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active">الملفات</button>
+                    <button class="tab-btn">نشاطي</button>
+                    <a href="#" class="view-all">عرض الكل</a>
+                </div>
+                <div class="files-grid">
+                    <div class="portfolio-item">
+                        <div class="item-thumb"></div>
+                        <div class="item-desc">موک اب هوية <br><small>موك اب هوية لمنتج العناية بالبشرة</small></div>
+                    </div>
+                    <div class="portfolio-item"><div class="item-thumb"></div><div class="item-desc">موک اب هوية <br><small>موك اب هوية لمنتج العناية بالبشرة</small></div></div>
+                    <div class="portfolio-item"><div class="item-thumb"></div><div class="item-desc">موک اب هوية <br><small>موك اب هوية لمنتج العناية بالبشرة</small></div></div>
+                    <div class="portfolio-item"><div class="item-thumb"></div><div class="item-desc">موک اب هوية <br><small>موك اب هوية لمنتج العناية بالبشرة</small></div></div>
+                    <div class="portfolio-item"><div class="item-thumb"></div><div class="item-desc">موک اب هوية <br><small>موك اب هوية لمنتج العناية بالبشرة</small></div></div>
+                </div>
+            </div>
+
+            <div class="side-widgets-section">
+                <div class="widget-card card-container">
+                    <h4>تقييمات العملاء</h4>
+                    <div class="reviews-list">
+                        <div class="review-item"><span class="r-name">الاسم</span> <span class="stars">★★★★★</span></div>
+                        <div class="review-item"><span class="r-name">الاسم</span> <span class="stars">★★★★★</span></div>
+                        <div class="review-item"><span class="r-name">الاسم</span> <span class="stars">★★★★★</span></div>
+                        <div class="review-item"><span class="r-name">الاسم</span> <span class="stars">★★★★★</span></div>
+                    </div>
+                </div>
+                <div class="widget-card card-container mt-15">
+                    <h4>شارات الإنجاز</h4>
+                    <div class="badges-grid">
+                        <div class="badge-item"><i class="fas fa-shield-alt gold"></i><small>مصمم محترف</small></div>
+                        <div class="badge-item"><i class="fas fa-shield-alt gold"></i><small>بائع نشط</small></div>
+                        <div class="badge-item"><i class="fas fa-shield-alt gold"></i><small>مبدع</small></div>
+                        <div class="badge-item"><i class="fas fa-shield-alt gold"></i><small>أعلى مبيعات</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="folders-section" class="content-section">
+        
+        <div class="files-stats-card">
+            <div class="stat-group main-stat">
+                <div class="stat-icon-large"><i class="fas fa-folder"></i></div>
+                <div class="stat-text">
+                    <h3>إجمالي الملفات المدفوعة</h3>
+                    <p>ملف 245</p>
+                </div>
+            </div>
+            
+            <div class="stat-divider"></div>
+            
+            <div class="stat-group">
+                <p>المساحة المستخدمة</p>
+                <h3>2.45</h3>
+                <small>من اصل 10GB</small>
+            </div>
+            
+            <div class="stat-divider"></div>
+            
+            <div class="stat-group">
+                <p>عدد المجلدات</p>
+                <h3>2.45</h3> <small>مجلد 20</small>
+            </div>
+            
+            <div class="stat-divider"></div>
+            
+            <div class="stat-group">
+                <p>الملفات هذا الشهر</p>
+                <h3 class="highlight">ملف 30+</h3>
+            </div>
+        </div>
+
+        <div class="files-list-container">
+            <div class="list-header-top">
+                <a href="#" class="view-all-link">عرض الكل</a>
+            </div>
+            
+            <div class="list-row header-row">
+                <div class="col-format">صيغة الملف</div>
+                <div class="col-type">نوع الملف</div>
+                <div class="col-date">تاريخ الإضافة</div>
+                <div class="col-product">المنتج</div>
+            </div>
+
+            <div class="list-row file-item">
+                <div class="col-format file-format-info">
+                    <div class="pdf-icon-box">PDF</div>
+                    <div class="file-name-info">
+                        <strong>تصميم هوية بصرية pdf</strong>
+                        <span>ملف pdf</span>
+                    </div>
+                    <div class="file-img-placeholder">صورة الملف</div>
+                </div>
+                <div class="col-type">PDF</div>
+                <div class="col-date">2 يوليو 2026</div>
+                <div class="col-product">هوية عناية بالبشرة</div>
+            </div>
+
+            <div class="list-row file-item">
+                <div class="col-format file-format-info">
+                    <div class="pdf-icon-box">PDF</div>
+                    <div class="file-name-info">
+                        <strong>تصميم هوية بصرية pdf</strong>
+                        <span>ملف pdf</span>
+                    </div>
+                    <div class="file-img-placeholder">صورة الملف</div>
+                </div>
+                <div class="col-type">PDF</div>
+                <div class="col-date">2 يوليو 2026</div>
+                <div class="col-product">هوية عناية بالبشرة</div>
+            </div>
+
+            <div class="list-row file-item">
+                <div class="col-format file-format-info">
+                    <div class="pdf-icon-box">PDF</div>
+                    <div class="file-name-info">
+                        <strong>تصميم هوية بصرية pdf</strong>
+                        <span>ملف pdf</span>
+                    </div>
+                    <div class="file-img-placeholder">صورة الملف</div>
+                </div>
+                <div class="col-type">PDF</div>
+                <div class="col-date">2 يوليو 2026</div>
+                <div class="col-product">هوية عناية بالبشرة</div>
+            </div>
+
+            <div class="list-row file-item">
+                <div class="col-format file-format-info">
+                    <div class="pdf-icon-box">PDF</div>
+                    <div class="file-name-info">
+                        <strong>تصميم هوية بصرية pdf</strong>
+                        <span>ملف pdf</span>
+                    </div>
+                    <div class="file-img-placeholder">صورة الملف</div>
+                </div>
+                <div class="col-type">PDF</div>
+                <div class="col-date">2 يوليو 2026</div>
+                <div class="col-product">هوية عناية بالبشرة</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="projects-section" class="content-section">
+    
+    <div class="projects-tabs">
+        <button class="tab-btn active" data-filter="all">الكل</button>
+        <button class="tab-btn" data-filter="pending">بانتظار التأكيد</button>
+        <button class="tab-btn" data-filter="progress">قيد التنفيذ</button>
+        <button class="tab-btn" data-filter="completed">المكتملة</button>
+    </div>
+
+    <div class="projects-grid">
+        
+        <div class="project-card" data-status="progress">
+            <div class="card-p-header">
+                <span class="p-status-tag status-progress">قيد التنفيذ</span>
+                <i class="fas fa-ellipsis-v card-actions-icon"></i>
+            </div>
+            <h3 class="p-card-title">تطوير الهوية البصرية لشركة سدا المحدودة</h3>
+            <p class="p-card-desc">بناء الشعار، الدليل الإرشادي، القرطاسية، وتطبيقات الهوية الرقمية بالكامل.</p>
+            
+            <div class="p-progress-container">
+                <div class="p-progress-text">
+                    <span>نسبة الإنجاز</span>
+                    <strong>65%</strong>
+                </div>
+                <div class="p-progress-bar-bg">
+                    <div class="p-progress-bar-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+
+            <div class="card-p-footer">
+                <div class="p-team-avatars">
+                    <span class="avatar-circle" style="background-color: #6a1b9a;">A</span>
+                    <span class="avatar-circle" style="background-color: #0288d1;">M</span>
+                </div>
+                <div class="p-due-date">
+                    <i class="far fa-calendar-alt"></i> 25 يوليو 2026
+                </div>
+            </div>
+        </div>
+
+        <div class="project-card" data-status="pending">
+            <div class="card-p-header">
+                <span class="p-status-tag status-pending">بانتظار التأكيد</span>
+                <i class="fas fa-ellipsis-v card-actions-icon"></i>
+            </div>
+            <h3 class="p-card-title">تصميم واجهات متجر الكتروني (تطبيق جوال)</h3>
+            <p class="p-card-desc">رسم وتجربة واجهات المستخدم وتجربة العميل لمتجر عطور فاخرة على Figma.</p>
+            
+            <div class="p-progress-container">
+                <div class="p-progress-text">
+                    <span>نسبة الإنجاز</span>
+                    <strong>12%</strong>
+                </div>
+                <div class="p-progress-bar-bg">
+                    <div class="p-progress-bar-fill" style="width: 12%; background: #ff9800;"></div>
+                </div>
+            </div>
+
+            <div class="card-p-footer">
+                <div class="p-team-avatars">
+                    <span class="avatar-circle" style="background-color: #e65100;">S</span>
+                </div>
+                <div class="p-due-date">
+                    <i class="far fa-calendar-alt"></i> 05 أغسطس 2026
+                </div>
+            </div>
+        </div>
+
+        <div class="project-card" data-status="completed">
+            <div class="card-p-header">
+                <span class="p-status-tag status-completed">المكتملة</span>
+                <i class="fas fa-ellipsis-v card-actions-icon"></i>
+            </div>
+            <h3 class="p-card-title">تصاميم السوشيال ميديا لشهر يونيو</h3>
+            <p class="p-card-desc">حزمة تصاميم إعلانية ومحتوى تفاعلي لمنصات إكس وإنستغرام (30 تصميم).</p>
+            
+            <div class="p-progress-container">
+                <div class="p-progress-text">
+                    <span>نسبة الإنجاز</span>
+                    <strong>100%</strong>
+                </div>
+                <div class="p-progress-bar-bg">
+                    <div class="p-progress-bar-fill" style="width: 100%; background: #4caf50;"></div>
+                </div>
+            </div>
+
+            <div class="card-p-footer">
+                <div class="p-team-avatars">
+                    <span class="avatar-circle" style="background-color: #00796b;">K</span>
+                    <span class="avatar-circle" style="background-color: #c2185b;">N</span>
+                </div>
+                <div class="p-due-date">
+                    <i class="far fa-calendar-alt"></i> 30 يونيو 2026
+                </div>
+            </div>
+        </div>
+
+        <div class="project-card" data-status="progress">
+            <div class="card-p-header">
+                <span class="p-status-tag status-progress">قيد التنفيذ</span>
+                <i class="fas fa-ellipsis-v card-actions-icon"></i>
+            </div>
+            <h3 class="p-card-title">إنتاج فيديو موشن جرافيك ترويجي</h3>
+            <p class="p-card-desc">كتابة السكربت، تسجيل التعليق الصوتي، والتحريك والإنتاج الصوتي النهائي بدقة 4K.</p>
+            
+            <div class="p-progress-container">
+                <div class="p-progress-text">
+                    <span>نسبة الإنجاز</span>
+                    <strong>40%</strong>
+                </div>
+                <div class="p-progress-bar-bg">
+                    <div class="p-progress-bar-fill" style="width: 40%;"></div>
+                </div>
+            </div>
+
+            <div class="card-p-footer">
+                <div class="p-team-avatars">
+                    <span class="avatar-circle" style="background-color: #512da8;">H</span>
+                </div>
+                <div class="p-due-date">
+                    <i class="far fa-calendar-alt"></i> 18 أغسطس 2026
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+
+
+    <div id="upload-section" class="content-section">
+        <div class="drag-drop-container" id="dropZone">...</div>
+        </div>
+
+</main>
+
+        <aside class="sidebar left-sidebar" id="sidebarLeft">
+            <div class="context-section">
+                <h3 class="section-title">إعدادات رفع الملف</h3>
+                <div class="checkbox-group">
+                    <label class="checkbox-label"><input type="checkbox" checked> جودة عالية</label>
+                    <label class="checkbox-label"><input type="checkbox" checked> تنسيق مناسب</label>
+                    <label class="checkbox-label"><input type="checkbox"> عرض وحجم واضح</label>
+                    <label class="checkbox-label"><input type="checkbox" checked> التزام بحقوق الملكية</label>
+                </div>
+            </div>
+            
+            <div class="context-section">
+                <h3 class="section-title">الملفات الأخيرة</h3>
+                <div class="recent-uploads-list">
+                    <div class="mini-card">
+                        <div class="file-thumb"><i class="fas fa-file-image"></i></div>
+                        <div class="file-details">
+                            <span class="file-name">شعار_الشركة.png</span>
+                            <span class="file-meta">2.4 MB • مكتمل</span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="file-thumb"><i class="fas fa-file-pdf"></i></div>
+                        <div class="file-details">
+                            <span class="file-name">دليل_الهوية.pdf</span>
+                            <span class="file-meta">5.1 MB • مكتمل</span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="file-thumb"><i class="fas fa-file-archive"></i></div>
+                        <div class="file-details">
+                            <span class="file-name">ملفات_المشروع.zip</span>
+                            <span class="file-meta">15.0 MB • قيد الرفع...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
