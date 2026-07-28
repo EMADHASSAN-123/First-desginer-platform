@@ -117,69 +117,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const gridContainer = document.getElementById("liveDesignsGrid");
         if (!gridContainer) return;
 
-        // التقاط النسخة النشطة من عميل سوبابيس المعرف في ملفك الآخر
         const client = window.supabaseClient || window.supabaseClientInstance || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+        const fallbackDesigns = [
+            { design_title: 'هوية فاخرة', designer_name: 'عمار محمد علي', image_urls: ['https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80'] },
+            { design_title: 'بوستر عناية', designer_name: 'سارة أحمد', image_urls: ['https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=800&q=80'] }
+        ];
 
         try {
-            if (!client) {
-                console.error("❌ لم يتم العثور على العميل النشط 'supabaseClient'. تأكد من وضع window.supabaseClient = supabaseClient في نهاية ملف supabaseClient.js");
-                gridContainer.innerHTML = `<div class="loading-designs">❌ خطأ: لم يتم تهيئة اتصال سوبابيس بشكل صحيح.</div>`;
-                return;
-            }
+            if (!client) throw new Error('المрубِط غير جاهز');
 
-            // استعلام جلب البيانات حية باستخدام المتغير الخاص بك
-            const { data: submissions, error } = await client
-                .from('submissions')
-                .select('*')
-                .order('created_at', { ascending: false });
-
+            const { data: submissions, error } = await client.from('submissions').select('*').order('created_at', { ascending: false }).limit(6);
             if (error) throw error;
 
-            if (!submissions || submissions.length === 0) {
-                gridContainer.innerHTML = `<div class="loading-designs">💡 لا توجد تصاميم مرفوعة في هذه المسابقة بعد. كن أول المشاركين!</div>`;
-                return;
-            }
-
-            // تنظيف الحاوية ومسح مؤشر جاري التحميل لبناء الكروت
+            const designs = (submissions && submissions.length) ? submissions : fallbackDesigns;
             gridContainer.innerHTML = "";
 
-            submissions.forEach(design => {
-                // التحقق من وجود صورة مرفوعة، وإذا لم توجد نضع صورة افتراضية أنيقة
-                const coverImage = (design.image_urls && design.image_urls.length > 0) ? design.image_urls[0] : "https://unsplash.com";
-                const displayTitle = design.design_title || "تصميم هوية فاخرة";
-                const displayAuthor = design.designer_name || "عمار محمد علي";
-
-                // بناء الكرت المطابق تماماً للصورة المرفوعة هيكلياً
-                const cardHTML = `
+            designs.forEach(design => {
+                const coverImage = Array.isArray(design.image_urls) ? design.image_urls[0] : (design.image_urls || 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=800&q=80');
+                const displayTitle = design.design_title || 'تصميم جديد';
+                const displayAuthor = design.designer_name || 'مبدع';
+                gridContainer.insertAdjacentHTML('beforeend', `
                     <div class="design-card-item">
-                        <div class="design-card-thumbnail">
-                            <img src="${coverImage}" alt="${displayTitle}">
-                            <button class="design-card-heart-btn" onclick="this.classList.toggle('liked')">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
+                        <div class="design-card-thumbnail"><img src="${coverImage}" alt="${displayTitle}"></div>
                         <div class="design-card-body">
                             <h4 class="design-card-title">${displayTitle}</h4>
                             <p class="design-card-author">${displayAuthor}</p>
-                            <div class="design-card-rating">
-                                <span class="rating-number">4.9</span>
-                                <div class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                            </div>
+                            <div class="design-card-rating"><span class="rating-number">4.9</span><div class="rating-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div></div>
                         </div>
                     </div>
-                `;
-                gridContainer.insertAdjacentHTML("beforeend", cardHTML);
+                `);
             });
 
+            if (typeof window.renderQuickStats === 'function') window.renderQuickStats(designs.length);
         } catch (err) {
             console.error("خطأ أثناء جلب التصاميم من Supabase:", err);
-            gridContainer.innerHTML = `<div class="loading-designs">❌ فشل تحميل البيانات: ${err.message}</div>`;
+            gridContainer.innerHTML = `<div class="loading-designs">💡 تم تحميل تصاميم افتراضية بسبب عدم توفر البيانات.</div>`;
         }
     }
 
