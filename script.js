@@ -133,8 +133,88 @@ document.addEventListener('DOMContentLoaded', () => {
         profileSettingsMessage.className = `settings-message ${type}`;
     }
 
+    const communityNotifications = [
+        {
+            id: 'notif-1',
+            postId: 'post-1',
+            actor: 'أحمد محمد',
+            message: 'أعجب بمنشورك: "ما هي أفضل الأدوات لتصميم تجربة المستخدم للمبتدئين؟"',
+            time: 'قبل دقيقة',
+            unread: true
+        },
+        {
+            id: 'notif-2',
+            postId: 'post-1',
+            actor: 'سارة خالد',
+            message: 'علّقت على منشورك: "هذا موضوع مهم للمبتدئين!"',
+            time: 'قبل 5 دقائق',
+            unread: true
+        },
+        {
+            id: 'notif-3',
+            postId: 'post-2',
+            actor: 'مصممة بارزة',
+            message: 'نشرت منشورًا جديدًا في المجتمع.',
+            time: 'قبل 20 دقيقة',
+            unread: false
+        }
+    ];
+
     function getSupabaseClient() {
         return window.supabaseClient || window.supabaseClientInstance || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+    }
+
+    function renderNotifications() {
+        const list = document.getElementById('notificationsList');
+        const navNotification = document.querySelector('#navMenu li[data-target="notifications-section"]');
+        if (!list || !navNotification) return;
+
+        list.innerHTML = '';
+        const unreadCount = communityNotifications.filter(n => n.unread).length;
+
+        communityNotifications.forEach(notification => {
+            const item = document.createElement('div');
+            item.className = `notification-item${notification.unread ? ' unread' : ''}`;
+            item.dataset.postId = notification.postId;
+            item.dataset.notificationId = notification.id;
+            item.innerHTML = `
+                <div class="notification-avatar"></div>
+                <div class="notification-body">
+                    <strong>${notification.actor}</strong>
+                    <p>${notification.message}</p>
+                </div>
+                <div class="notification-meta"><span>${notification.time}</span></div>
+            `;
+            list.appendChild(item);
+        });
+
+        if (unreadCount > 0) {
+            navNotification.classList.add('has-unread');
+            const badge = navNotification.querySelector('.nav-badge');
+            if (badge) badge.textContent = unreadCount;
+        } else {
+            navNotification.classList.remove('has-unread');
+            const badge = navNotification.querySelector('.nav-badge');
+            if (badge) badge.textContent = '0';
+        }
+    }
+
+    function markNotificationRead(notificationId) {
+        const notification = communityNotifications.find(n => n.id === notificationId);
+        if (notification) {
+            notification.unread = false;
+            renderNotifications();
+        }
+    }
+
+    function navigateToPost(postId) {
+        showSection('community-section');
+        const post = document.querySelector(`[data-post-id="${postId}"]`);
+        if (post) {
+            post.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            post.classList.add('notification-highlight');
+            setTimeout(() => post.classList.remove('notification-highlight'), 1600);
+        }
     }
 
     function showSection(targetId) {
@@ -271,7 +351,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    renderNotifications();
     loadProfileData();
+
+    document.addEventListener('click', (event) => {
+        const notificationItem = event.target.closest('.notification-item');
+        if (notificationItem) {
+            const notificationId = notificationItem.dataset.notificationId;
+            const postId = notificationItem.dataset.postId;
+            if (notificationId) markNotificationRead(notificationId);
+            if (postId) navigateToPost(postId);
+        }
+    });
 
     // 2. تفعيل زر "رفع ملف جديد" في الشريط العلوي
     const headerUploadBtn = document.querySelector('.header-upload-btn');

@@ -30,7 +30,7 @@
                     <li data-target="community-section"><i class="fas fa-users"></i> المجتمع</li>
                     <li data-target="freedit-section"><i class="fas fa-trophy"></i> المسابقات</li>
                     <li data-target="accounts-section"><i class="fas fa-user-circle"></i> الحسابات</li>
-                    <li data-target="notifications-section"><i class="fas fa-bell"></i> الإشعارات</li>
+                    <li data-target="notifications-section" class="has-unread"><i class="fas fa-bell"></i> الإشعارات <span class="nav-badge">2</span></li>
                     <li data-target="messages-section"><i class="fas fa-envelope"></i> الرسائل</li>
                     <li data-target="settings-section"><i class="fas fa-cog"></i> الإعدادات</li>
                 </ul>
@@ -264,7 +264,7 @@
                 </div>
 
                 <div class="community-posts-list">
-                    <div class="post-card">
+                    <div class="post-card" data-post-id="post-1">
                         <div class="post-card-meta">
                             <div class="post-author">
                                 <div class="author-avatar"></div>
@@ -280,7 +280,7 @@
                             <button type="button" class="outline-btn"><i class="fas fa-share"></i> مشاركة</button>
                         </div>
                     </div>
-                    <div class="post-card">
+                    <div class="post-card" data-post-id="post-2">
                         <div class="post-card-meta">
                             <div class="post-author">
                                 <div class="author-avatar"></div>
@@ -294,6 +294,49 @@
                         <div class="post-card-footer">
                             <button type="button" class="outline-btn"><i class="fas fa-thumbs-up"></i> 0.0</button>
                             <button type="button" class="outline-btn"><i class="fas fa-share"></i> مشاركة</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notifications-section" class="content-section">
+                <div class="notifications-header card-container">
+                    <div>
+                        <h3>الإشعارات</h3>
+                        <p>تبقيك هذه التنبيهات على اطلاع فوري بكل التفاعلات داخل المجتمع.</p>
+                    </div>
+                    <span class="notification-status-badge">جديدة</span>
+                </div>
+
+                <div class="notification-list card-container" id="notificationsList">
+                    <div class="notification-item unread" data-post-id="post-1">
+                        <div class="notification-avatar"></div>
+                        <div class="notification-body">
+                            <strong>أحمد محمد</strong>
+                            <p>أعجب بمنشورك: "ما هي أفضل الأدوات لتصميم تجربة المستخدم للمبتدئين؟"</p>
+                        </div>
+                        <div class="notification-meta">
+                            <span>قبل دقيقة</span>
+                        </div>
+                    </div>
+                    <div class="notification-item unread" data-post-id="post-1">
+                        <div class="notification-avatar"></div>
+                        <div class="notification-body">
+                            <strong>سارة خالد</strong>
+                            <p>علّقت على منشورك: "هذا موضوع مهم للمبتدئين!"</p>
+                        </div>
+                        <div class="notification-meta">
+                            <span>قبل 5 دقائق</span>
+                        </div>
+                    </div>
+                    <div class="notification-item" data-post-id="post-2">
+                        <div class="notification-avatar"></div>
+                        <div class="notification-body">
+                            <strong>مصممة بارزة</strong>
+                            <p>نشرت منشورًا جديدًا في المجتمع.</p>
+                        </div>
+                        <div class="notification-meta">
+                            <span>قبل 20 دقيقة</span>
                         </div>
                     </div>
                 </div>

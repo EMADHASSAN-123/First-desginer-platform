@@ -699,6 +699,100 @@ body {
     margin-left: 8px;
 }
 
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+}
+
+.notification-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 18px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.notification-item.unread {
+    background: rgba(104, 87, 255, 0.18);
+    border-color: rgba(104, 87, 255, 0.35);
+}
+
+.notification-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4d78ff, #1f3eb8);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.notification-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.notification-body strong {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.notification-body p {
+    margin: 0;
+    color: rgba(255,255,255,0.80);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.notification-meta span {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.82rem;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.notifications-header h3 {
+    margin: 0 0 6px;
+}
+
+.notification-status-badge {
+    background: #ff6b6b;
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+.has-unread {
+    position: relative;
+}
+
+.has-unread .nav-badge {
+    margin-left: 8px;
+    background: #ff6b6b;
+    color: white;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+}
+
 @media (max-width: 960px) {
     .community-hero {
         grid-template-columns: 1fr;
@@ -720,6 +814,16 @@ body {
 
     .primary-upload-btn {
         align-self: stretch;
+    }
+
+    .notification-item {
+        grid-template-columns: auto 1fr;
+    }
+
+    .notifications-header {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
     }
 }
         width: 100%;
