@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileMemberSinceInput = document.getElementById('profileMemberSince');
     const profileBioInput = document.getElementById('profileBio');
     const profileImageInput = document.getElementById('profileImage');
+    const profileImageFileInput = document.getElementById('profileImageFile');
+    const profilePhotoPreview = document.getElementById('profilePhotoPreview');
     const btnResetProfile = document.getElementById('btnResetProfile');
 
     function escapeHtml(value) {
@@ -50,6 +52,36 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profileData.profile_member_since) details.push(`📅 ${profileData.profile_member_since}`);
             subInfo.innerHTML = details.length ? details.join(' • ') : 'مصمم جرافيك';
         }
+
+        const bannerPreview = document.getElementById('profileImagePreview');
+        const headerAvatar = document.getElementById('headerProfileAvatar');
+        const imageUrl = profileData.profile_image_url || '';
+
+        if (bannerPreview && headerAvatar) {
+            if (imageUrl) {
+                bannerPreview.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt="الصورة الشخصية">`;
+                bannerPreview.classList.add('has-image');
+                headerAvatar.style.backgroundImage = `url("${imageUrl}")`;
+                headerAvatar.style.backgroundSize = 'cover';
+                headerAvatar.style.backgroundPosition = 'center';
+                headerAvatar.innerHTML = '';
+            } else {
+                bannerPreview.innerHTML = '<span>الصورة</span>';
+                bannerPreview.classList.remove('has-image');
+                headerAvatar.style.backgroundImage = 'none';
+                headerAvatar.innerHTML = '<i class="fas fa-user"></i>';
+            }
+        }
+
+        if (profilePhotoPreview) {
+            if (imageUrl) {
+                profilePhotoPreview.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt="معاينة الصورة">`;
+                profilePhotoPreview.classList.add('has-image');
+            } else {
+                profilePhotoPreview.innerHTML = '<span>سيظهر هنا المعاينة</span>';
+                profilePhotoPreview.classList.remove('has-image');
+            }
+        }
     }
 
     function populateProfileForm(profileData) {
@@ -70,6 +102,29 @@ document.addEventListener('DOMContentLoaded', () => {
             profile_bio: profileBioInput ? profileBioInput.value.trim() : '',
             profile_image_url: profileImageInput ? profileImageInput.value.trim() : ''
         };
+    }
+
+    async function uploadProfileImage(file) {
+        const client = getSupabaseClient();
+        if (!client || !file) return '';
+
+        try {
+            const fileExt = file.name.split('.').pop() || 'jpg';
+            const safeName = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${fileExt}`;
+            const filePath = `avatars/${safeName}`;
+            const { error } = await client.storage.from('designer_files').upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+            if (error) throw error;
+
+            const { data: publicUrlData } = client.storage.from('designer_files').getPublicUrl(filePath);
+            return publicUrlData?.publicUrl || '';
+        } catch (error) {
+            console.error('فشل رفع الصورة الشخصية:', error);
+            throw error;
+        }
     }
 
     function setSettingsMessage(message, type = 'info') {
@@ -136,7 +191,22 @@ document.addEventListener('DOMContentLoaded', () => {
     async function saveProfileData(event) {
         if (event) event.preventDefault();
 
-        const profileData = getProfileFormData();
+        let profileData = getProfileFormData();
+        const selectedImageFile = profileImageFileInput?.files?.[0];
+
+        if (selectedImageFile) {
+            setSettingsMessage('جارٍ رفع الصورة الشخصية...', 'info');
+            try {
+                const uploadedImageUrl = await uploadProfileImage(selectedImageFile);
+                if (uploadedImageUrl) {
+                    profileData = { ...profileData, profile_image_url: uploadedImageUrl };
+                    if (profileImageInput) profileImageInput.value = uploadedImageUrl;
+                }
+            } catch (error) {
+                setSettingsMessage('لم يتم رفع الصورة الشخصية، لكن البيانات الأخرى سيتم حفظها محلياً.', 'info');
+            }
+        }
+
         localStorage.setItem('designerProfile', JSON.stringify(profileData));
         setProfilePreview(profileData);
         setSettingsMessage('تم حفظ الملف الشخصي محلياً بنجاح. جارٍ محاولة حفظه في قاعدة البيانات...', 'info');
@@ -156,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error) throw error;
 
             if (data && data[0]) {
-                setSettingsMessage('تم حفظ الملف الشخصي بنجاح في قاعدة البيانات.', 'success');
+                setSettingsMessage('تم حفظ الملف الشخصي والصورة بنجاح في قاعدة البيانات.', 'success');
             }
         } catch (error) {
             console.error('فشل حفظ الملف الشخصي في Supabase:', error);

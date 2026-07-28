@@ -73,7 +73,7 @@
                             <span class="u-name">الاسم</span>
                             <span class="u-title">مصمم جرافيك</span>
                         </div>
-                        <div class="u-avatar"></div>
+                        <div class="u-avatar" id="headerProfileAvatar"></div>
                     </div>
                 </div>
             </header>
@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="user-image-box">
-                        <div class="image-placeholder">الصورة</div>
+                        <div class="image-placeholder" id="profileImagePreview"><span>الصورة</span></div>
                     </div>
                 </div>
 
@@ -258,8 +258,12 @@
                                 <textarea id="profileBio" rows="4" placeholder="اكتب نبذة مختصرة عن خبرتك ومهاراتك..."></textarea>
                             </label>
                             <label class="settings-field full-width">
-                                <span>رابط الصورة الشخصية</span>
+                                <span>الصورة الشخصية</span>
+                                <input type="file" id="profileImageFile" accept="image/*">
                                 <input type="url" id="profileImage" placeholder="https://example.com/photo.jpg">
+                                <div class="profile-photo-preview" id="profilePhotoPreview">
+                                    <span>سيظهر هنا المعاينة</span>
+                                </div>
                             </label>
                         </div>
 
