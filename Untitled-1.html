@@ -1,0 +1,503 @@
+<!DOCTYPE html>  
+<html lang="ar" dir="rtl">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>إكسيليفون تفاعلي</title>  
+<style>  
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');  
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }  
+  
+  body {  
+    min-height: 100vh;  
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    font-family: 'Cairo', sans-serif;  
+    padding: 20px;  
+  }  
+  
+  .container {  
+    background: linear-gradient(180deg, #2a2a4a 0%, #1e1e3a 100%);  
+    border-radius: 40px;  
+    padding: 40px 50px 50px;  
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);  
+    border: 1px solid rgba(255,255,255,0.06);  
+    max-width: 1000px;  
+    width: 100%;  
+  }  
+  
+  h1 {  
+    text-align: center;  
+    color: #f0d9b5;  
+    font-size: 2.2rem;  
+    font-weight: 900;  
+    letter-spacing: 2px;  
+    margin-bottom: 8px;  
+    text-shadow: 0 2px 10px rgba(240,217,181,0.2);  
+  }  
+  
+  .subtitle {  
+    text-align: center;  
+    color: #8899aa;  
+    font-size: 1rem;  
+    margin-bottom: 30px;  
+    letter-spacing: 1px;  
+  }  
+  
+  .xylophone-frame {  
+    background: linear-gradient(180deg, #3d2b1f 0%, #5a3d2b 50%, #3d2b1f 100%);  
+    border-radius: 30px;  
+    padding: 35px 30px 30px;  
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.08);  
+    border: 1px solid #6b4c3b;  
+    position: relative;  
+  }  
+  
+  .frame-pins {  
+    display: flex;  
+    justify-content: space-between;  
+    padding: 0 15px;  
+    margin-bottom: 8px;  
+  }  
+  
+  .pin {  
+    width: 12px;  
+    height: 12px;  
+    background: radial-gradient(circle, #c0a080 0%, #8a7050 100%);  
+    border-radius: 50%;  
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);  
+  }  
+  
+  .keys-container {  
+    display: flex;  
+    gap: 6px;  
+    justify-content: center;  
+    align-items: flex-end;  
+    padding: 0 5px;  
+  }  
+  
+  .key {  
+    cursor: pointer;  
+    border: none;  
+    border-radius: 8px 8px 4px 4px;  
+    position: relative;  
+    transition: transform 0.07s ease, box-shadow 0.07s ease;  
+    box-shadow: 0 6px 0 rgba(0,0,0,0.35), 0 8px 20px rgba(0,0,0,0.3);  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+    justify-content: flex-end;  
+    padding-bottom: 14px;  
+    min-width: 52px;  
+    flex: 1;  
+    user-select: none;  
+    -webkit-tap-highlight-color: transparent;  
+    outline: none;  
+  }  
+  
+  .key .note-label {  
+    color: rgba(255,255,255,0.85);  
+    font-family: 'Cairo', sans-serif;  
+    font-weight: 700;  
+    font-size: 0.95rem;  
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);  
+    pointer-events: none;  
+  }  
+  
+  .key .freq-label {  
+    color: rgba(255,255,255,0.5);  
+    font-size: 0.6rem;  
+    font-weight: 400;  
+    pointer-events: none;  
+    margin-top: 2px;  
+  }  
+  
+  .key:active, .key.pressed {  
+    transform: translateY(5px);  
+    box-shadow: 0 1px 0 rgba(0,0,0,0.35), 0 5px 15px rgba(0,0,0,0.3);  
+  }  
+  
+  .key:active .note-label, .key.pressed .note-label {  
+    transform: translateY(-3px);  
+  }  
+  
+  /* Key heights from longest (lowest note) to shortest (highest note) */  
+  .key[data-note="C4"] { height: 220px; background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%); }  
+  .key[data-note="D4"] { height: 205px; background: linear-gradient(180deg, #e67e22 0%, #d35400 100%); }  
+  .key[data-note="E4"] { height: 190px; background: linear-gradient(180deg, #f1c40f 0%, #d4ac0d 100%); }  
+  .key[data-note="F4"] { height: 175px; background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%); }  
+  .key[data-note="G4"] { height: 160px; background: linear-gradient(180deg, #3498db 0%, #2980b9 100%); }  
+  .key[data-note="A4"] { height: 145px; background: linear-gradient(180deg, #9b59b6 0%, #8e44ad 100%); }  
+  .key[data-note="B4"] { height: 130px; background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%); }  
+  .key[data-note="C5"] { height: 115px; background: linear-gradient(180deg, #1abc9c 0%, #16a085 100%); }  
+  .key[data-note="D5"] { height: 100px; background: linear-gradient(180deg, #e67e22 0%, #d35400 100%); }  
+  .key[data-note="E5"] { height: 85px;  background: linear-gradient(180deg, #f1c40f 0%, #d4ac0d 100%); }  
+  .key[data-note="F5"] { height: 70px;  background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%); }  
+  .key[data-note="G5"] { height: 55px;  background: linear-gradient(180deg, #3498db 0%, #2980b9 100%); }  
+  
+  .key:hover:not(:active) {  
+    filter: brightness(1.15);  
+    box-shadow: 0 6px 0 rgba(0,0,0,0.35), 0 8px 25px rgba(255,255,255,0.1);  
+  }  
+  
+  .key::after {  
+    content: '';  
+    position: absolute;  
+    top: 0;  
+    left: 0;  
+    right: 0;  
+    height: 40%;  
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);  
+    border-radius: 8px 8px 0 0;  
+    pointer-events: none;  
+  }  
+  
+  .controls {  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    gap: 30px;  
+    margin-top: 25px;  
+    flex-wrap: wrap;  
+  }  
+  
+  .control-group {  
+    display: flex;  
+    align-items: center;  
+    gap: 12px;  
+  }  
+  
+  .control-group label {  
+    color: #b8c8d8;  
+    font-size: 0.9rem;  
+    font-weight: 700;  
+  }  
+  
+  select, button {  
+    font-family: 'Cairo', sans-serif;  
+    background: rgba(255,255,255,0.08);  
+    border: 1px solid rgba(255,255,255,0.15);  
+    color: #e0e0e0;  
+    padding: 8px 16px;  
+    border-radius: 12px;  
+    font-size: 0.9rem;  
+    cursor: pointer;  
+    transition: all 0.2s;  
+  }  
+  
+  select:hover, button:hover {  
+    background: rgba(255,255,255,0.14);  
+    border-color: rgba(255,255,255,0.25);  
+  }  
+  
+  select:focus, button:focus {  
+    outline: none;  
+    border-color: #f0d9b5;  
+  }  
+  
+  button {  
+    background: linear-gradient(135deg, #f0d9b5, #d4b896);  
+    color: #1a1a2e;  
+    font-weight: 700;  
+    border: none;  
+    padding: 8px 24px;  
+  }  
+  
+  button:hover {  
+    background: linear-gradient(135deg, #ffe4c4, #e0c8a0);  
+    transform: scale(1.03);  
+  }  
+  
+  .status-bar {  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+    margin-top: 18px;  
+    padding: 10px 20px;  
+    background: rgba(0,0,0,0.25);  
+    border-radius: 16px;  
+    color: #8899aa;  
+    font-size: 0.85rem;  
+  }  
+  
+  .status-bar .note-display {  
+    color: #f0d9b5;  
+    font-weight: 700;  
+    font-size: 1.1rem;  
+  }  
+  
+  .volume-slider {  
+    width: 100px;  
+    accent-color: #f0d9b5;  
+    cursor: pointer;  
+  }  
+  
+  .instructions-toggle {  
+    text-align: center;  
+    margin-top: 15px;  
+  }  
+  
+  .instructions-toggle button {  
+    background: transparent;  
+    border: 1px solid rgba(255,255,255,0.1);  
+    color: #8899aa;  
+    font-size: 0.8rem;  
+    padding: 4px 16px;  
+  }  
+  
+  .instructions {  
+    margin-top: 15px;  
+    padding: 20px 24px;  
+    background: rgba(0,0,0,0.3);  
+    border-radius: 16px;  
+    border: 1px solid rgba(255,255,255,0.06);  
+    display: none;  
+  }  
+  
+  .instructions.show {  
+    display: block;  
+  }  
+  
+  .instructions h3 {  
+    color: #f0d9b5;  
+    font-size: 1rem;  
+    margin-bottom: 10px;  
+  }  
+  
+  .instructions ul {  
+    list-style: none;  
+    padding: 0;  
+  }  
+  
+  .instructions ul li {  
+    color: #b8c8d8;  
+    font-size: 0.88rem;  
+    padding: 5px 0;  
+    padding-right: 20px;  
+    position: relative;  
+  }  
+  
+  .instructions ul li::before {  
+    content: '🎵';  
+    position: absolute;  
+    right: 0;  
+    top: 5px;  
+    font-size: 0.7rem;  
+  }  
+  
+  @media (max-width: 700px) {  
+    .container { padding: 20px 15px; }  
+    .xylophone-frame { padding: 20px 12px; }  
+    .key { min-width: 32px; padding-bottom: 8px; }  
+    .key .note-label { font-size: 0.7rem; }  
+    .key .freq-label { display: none; }  
+    .key[data-note="C4"] { height: 150px; }  
+    .key[data-note="D4"] { height: 140px; }  
+    .key[data-note="E4"] { height: 130px; }  
+    .key[data-note="F4"] { height: 120px; }  
+    .key[data-note="G4"] { height: 110px; }  
+    .key[data-note="A4"] { height: 100px; }  
+    .key[data-note="B4"] { height: 90px; }  
+    .key[data-note="C5"] { height: 80px; }  
+    .key[data-note="D5"] { height: 70px; }  
+    .key[data-note="E5"] { height: 60px; }  
+    .key[data-note="F5"] { height: 50px; }  
+    .key[data-note="G5"] { height: 40px; }  
+    h1 { font-size: 1.5rem; }  
+    .keys-container { gap: 3px; }  
+    .controls { gap: 15px; }  
+    .volume-slider { width: 70px; }  
+  }  
+</style>  
+</head>  
+<body>  
+<div class="container">  
+  <h1>🎹 إكسيليفون</h1>  
+  <p class="subtitle">Xylophone · اضغط على المفاتيح لعزف النغمات</p>  
+  
+  <div class="xylophone-frame">  
+    <div class="frame-pins">  
+      <span class="pin"></span><span class="pin"></span><span class="pin"></span>  
+      <span class="pin"></span><span class="pin"></span><span class="pin"></span>  
+      <span class="pin"></span><span class="pin"></span><span class="pin"></span>  
+      <span class="pin"></span><span class="pin"></span><span class="pin"></span>  
+      <span class="pin"></span>  
+    </div>  
+    
+    <div class="keys-container" id="keysContainer">  
+      <!-- keys will be rendered by JS -->  
+    </div>  
+  </div>  
+  
+  <div class="controls">  
+    <div class="control-group">  
+      <label>🎼 الموجة</label>  
+      <select id="waveformSelect">  
+        <option value="sine">نقية (Sine)</option>  
+        <option value="triangle" selected>مثلثية (Triangle)</option>  
+        <option value="sawtooth">منشارية (Sawtooth)</option>  
+        <option value="square">مربعة (Square)</option>  
+      </select>  
+    </div>  
+    
+    <div class="control-group">  
+      <label>🔊 الصوت</label>  
+      <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.05" value="0.7">  
+    </div>  
+    
+    <button id="playScaleBtn">🎶 عزف السلم</button>  
+  </div>  
+  
+  <div class="status-bar">  
+    <span>💡 اضغط مفتاحاً</span>  
+    <span class="note-display" id="noteDisplay">—</span>  
+    <span>⌨️ لوحة المفاتيح</span>  
+  </div>  
+  
+  <div class="instructions-toggle">  
+    <button id="toggleInstructions">📖 إظهار التعليمات</button>  
+  </div>  
+  
+  <div class="instructions" id="instructions">  
+    <h3>📌 كيفية العزف</h3>  
+    <ul>  
+      <li>انقر بالماوس أو المس أي مفتاح لعزف النغمة</li>  
+      <li>استخدم لوحة المفاتيح: <strong>A S D F G H J K L ; '</strong> للمفاتيح من C4 إلى G5</li>  
+      <li>غيّر نوع الموجة الصوتية من قائمة "الموجة" لتعديل جرس الصوت</li>  
+      <li>تحكم بمستوى الصوت من شريط التمرير</li>  
+      <li>اضغط "عزف السلم" لسماع جميع النغمات تصاعدياً</li>  
+      <li>المفاتيح الأطول = نغمات أقل، المفاتيح الأقصر = نغمات أعلى</li>  
+    </ul>  
+  </div>  
+</div>  
+
+<script>  
+  const NOTES = [  
+    { note: 'C4', freq: 261.63 },  
+    { note: 'D4', freq: 293.66 },  
+    { note: 'E4', freq: 329.63 },  
+    { note: 'F4', freq: 349.23 },  
+    { note: 'G4', freq: 392.00 },  
+    { note: 'A4', freq: 440.00 },  
+    { note: 'B4', freq: 493.88 },  
+    { note: 'C5', freq: 523.25 },  
+    { note: 'D5', freq: 587.33 },  
+    { note: 'E5', freq: 659.25 },  
+    { note: 'F5', freq: 698.46 },  
+    { note: 'G5', freq: 783.99 }  
+  ];  
+  
+  const KEY_MAP = {  
+    'a': 0, 's': 1, 'd': 2, 'f': 3, 'g': 4,  
+    'h': 5, 'j': 6, 'k': 7, 'l': 8, ';': 9, "'": 10  
+  };  
+  
+  const keysContainer = document.getElementById('keysContainer');  
+  const noteDisplay = document.getElementById('noteDisplay');  
+  const waveformSelect = document.getElementById('waveformSelect');  
+  const volumeSlider = document.getElementById('volumeSlider');  
+  const playScaleBtn = document.getElementById('playScaleBtn');  
+  const toggleBtn = document.getElementById('toggleInstructions');  
+  const instructions = document.getElementById('instructions');  
+  
+  let audioCtx = null;  
+  
+  function getAudioContext() {  
+    if (!audioCtx) {  
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();  
+    }  
+    return audioCtx;  
+  }  
+  
+  function playNote(freq, duration = 0.8) {  
+    const ctx = getAudioContext();  
+    if (ctx.state === 'suspended') ctx.resume();  
+    
+    const volume = parseFloat(volumeSlider.value);  
+    const waveform = waveformSelect.value;  
+    
+    const osc = ctx.createOscillator();  
+    osc.type = waveform;  
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);  
+    
+    const gainNode = ctx.createGain();  
+    gainNode.gain.setValueAtTime(volume * 0.6, ctx.currentTime);  
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);  
+    
+    const filter = ctx.createBiquadFilter();  
+    filter.type = 'lowpass';  
+    filter.frequency.setValueAtTime(3000, ctx.currentTime);  
+    filter.frequency.exponentialRampToValueAtTime(1500, ctx.currentTime + 0.3);  
+    
+    osc.connect(filter);  
+    filter.connect(gainNode);  
+    gainNode.connect(ctx.destination);  
+    
+    osc.start(ctx.currentTime);  
+    osc.stop(ctx.currentTime + duration);  
+    
+    // Click attack for realism  
+    const clickOsc = ctx.createOscillator();  
+    clickOsc.type = 'sine';  
+    clickOsc.frequency.setValueAtTime(freq * 3, ctx.currentTime);  
+    const clickGain = ctx.createGain();  
+    clickGain.gain.setValueAtTime(volume * 0.15, ctx.currentTime);  
+    clickGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);  
+    clickOsc.connect(clickGain);  
+    clickGain.connect(ctx.destination);  
+    clickOsc.start(ctx.currentTime);  
+    clickOsc.stop(ctx.currentTime + 0.04);  
+  }  
+  
+  function pressKey(index) {  
+    if (index < 0 || index >= NOTES.length) return;  
+    const { note, freq } = NOTES[index];  
+    const keys = document.querySelectorAll('.key');  
+    const keyEl = keys[index];  
+    if (!keyEl) return;  
+    
+    keyEl.classList.add('pressed');  
+    noteDisplay.textContent = `${note} (${freq.toFixed(1)} Hz)`;  
+    playNote(freq);  
+    
+    setTimeout(() => {  
+      keyEl.classList.remove('pressed');  
+    }, 150);  
+  }  
+  
+  // Build keys  
+  NOTES.forEach(({ note, freq }, i) => {  
+    const key = document.createElement('button');  
+    key.className = 'key';  
+    key.dataset.note = note;  
+    key.innerHTML = `  
+      <span class="note-label">${note}</span>  
+      <span class="freq-label">${freq.toFixed(1)} Hz</span>  
+    `;  
+    key.addEventListener('click', () => pressKey(i));  
+    key.addEventListener('mousedown', (e) => e.preventDefault());  
+    keysContainer.appendChild(key);  
+  });  
+  
+  // Keyboard support  
+  document.addEventListener('keydown', (e) => {  
+    const key = e.key.toLowerCase();  
+    if (key in KEY_MAP) {  
+      e.preventDefault();  
+      pressKey(KEY_MAP[key]);  
+    }  
+  });  
+  
+  // Play scale  
+  playScaleBtn.addEventListener('click', async () => {  
+    for (let i = 0; i < NOTES.length; i++) {  
+      setTimeout(() => pressKey(i), i * 130);  
+    }  
+  });  
+  
+ </script>
+ </body>
+</html>
