@@ -8,34 +8,200 @@ document.addEventListener('DOMContentLoaded', () => {
     // جلب حاويات العرض الأساسية
     const contestMainView = document.getElementById("contest-main-view");
     const freeditContestModal = document.getElementById("freeditContestModal"); // المودال الجديد
+    const profileSettingsForm = document.getElementById('profileSettingsForm');
+    const profileSettingsMessage = document.getElementById('profileSettingsMessage');
+    const profileNameInput = document.getElementById('profileName');
+    const profileTitleInput = document.getElementById('profileTitle');
+    const profileLocationInput = document.getElementById('profileLocation');
+    const profileMemberSinceInput = document.getElementById('profileMemberSince');
+    const profileBioInput = document.getElementById('profileBio');
+    const profileImageInput = document.getElementById('profileImage');
+    const btnResetProfile = document.getElementById('btnResetProfile');
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function setProfilePreview(profileData) {
+        const mainName = document.querySelector('.main-name');
+        if (mainName) {
+            mainName.innerHTML = `${escapeHtml(profileData.profile_name || 'الاسم')}<span class="edit-icon"><i class="fas fa-pen"></i></span>`;
+        }
+
+        const userName = document.querySelector('.u-name');
+        if (userName) userName.textContent = profileData.profile_name || 'الاسم';
+
+        const userTitle = document.querySelector('.u-title');
+        if (userTitle) userTitle.textContent = profileData.profile_title || 'مصمم جرافيك';
+
+        const bioText = document.querySelector('.bio-text');
+        if (bioText) bioText.textContent = profileData.profile_bio || 'أحب تصميم الشعارات والهويات البصرية والتصاميم الإعلانية.';
+
+        const subInfo = document.querySelector('.sub-info');
+        if (subInfo) {
+            const details = [];
+            if (profileData.profile_title) details.push(profileData.profile_title);
+            if (profileData.profile_location) details.push(`📍 ${profileData.profile_location}`);
+            if (profileData.profile_member_since) details.push(`📅 ${profileData.profile_member_since}`);
+            subInfo.innerHTML = details.length ? details.join(' • ') : 'مصمم جرافيك';
+        }
+    }
+
+    function populateProfileForm(profileData) {
+        if (profileNameInput) profileNameInput.value = profileData.profile_name || '';
+        if (profileTitleInput) profileTitleInput.value = profileData.profile_title || '';
+        if (profileLocationInput) profileLocationInput.value = profileData.profile_location || '';
+        if (profileMemberSinceInput) profileMemberSinceInput.value = profileData.profile_member_since || '';
+        if (profileBioInput) profileBioInput.value = profileData.profile_bio || '';
+        if (profileImageInput) profileImageInput.value = profileData.profile_image_url || '';
+    }
+
+    function getProfileFormData() {
+        return {
+            profile_name: profileNameInput ? profileNameInput.value.trim() : '',
+            profile_title: profileTitleInput ? profileTitleInput.value.trim() : '',
+            profile_location: profileLocationInput ? profileLocationInput.value.trim() : '',
+            profile_member_since: profileMemberSinceInput ? profileMemberSinceInput.value.trim() : '',
+            profile_bio: profileBioInput ? profileBioInput.value.trim() : '',
+            profile_image_url: profileImageInput ? profileImageInput.value.trim() : ''
+        };
+    }
+
+    function setSettingsMessage(message, type = 'info') {
+        if (!profileSettingsMessage) return;
+        profileSettingsMessage.textContent = message;
+        profileSettingsMessage.className = `settings-message ${type}`;
+    }
+
+    function getSupabaseClient() {
+        return window.supabaseClient || window.supabaseClientInstance || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+    }
+
+    function showSection(targetId) {
+        navItems.forEach(nav => nav.classList.remove('active'));
+        contentSections.forEach(section => section.classList.remove('active'));
+
+        const targetSection = document.getElementById(targetId);
+        const matchingNav = document.querySelector(`#navMenu li[data-target="${targetId}"]`);
+
+        if (matchingNav) matchingNav.classList.add('active');
+
+        if (targetSection) {
+            targetSection.classList.add('active');
+            if (targetId === 'freedit-section') {
+                if (contestMainView) contestMainView.style.display = 'block';
+                if (freeditContestModal) freeditContestModal.style.display = 'none';
+            }
+        }
+
+        if (targetId === 'settings-section') {
+            loadProfileData();
+        }
+
+        if (window.innerWidth <= 1024) {
+            const sidebar = document.getElementById('sidebarRight');
+            if (sidebar) sidebar.classList.remove('show');
+        }
+    }
+
+    async function loadProfileData() {
+        const savedProfile = JSON.parse(localStorage.getItem('designerProfile') || 'null');
+        if (savedProfile) {
+            populateProfileForm(savedProfile);
+            setProfilePreview(savedProfile);
+        }
+
+        const client = getSupabaseClient();
+        if (!client) return;
+
+        try {
+            const { data, error } = await client.from('profiles').select('*').eq('id', 'default-profile').maybeSingle();
+            if (error) throw error;
+            if (data) {
+                populateProfileForm(data);
+                setProfilePreview(data);
+                localStorage.setItem('designerProfile', JSON.stringify(data));
+            }
+        } catch (error) {
+            console.warn('تعذر تحميل الملف الشخصي من Supabase:', error);
+            setSettingsMessage('تم حفظ البيانات محلياً. يرجى تشغيل SQL المدرج في Supabase لتمكين الجدول والسياسات.', 'info');
+        }
+    }
+
+    async function saveProfileData(event) {
+        if (event) event.preventDefault();
+
+        const profileData = getProfileFormData();
+        localStorage.setItem('designerProfile', JSON.stringify(profileData));
+        setProfilePreview(profileData);
+        setSettingsMessage('تم حفظ الملف الشخصي محلياً بنجاح. جارٍ محاولة حفظه في قاعدة البيانات...', 'info');
+
+        const client = getSupabaseClient();
+        if (!client) {
+            setSettingsMessage('تم حفظ البيانات محلياً لأن اتصال Supabase غير متاح حالياً.', 'info');
+            return;
+        }
+
+        try {
+            const { data, error } = await client
+                .from('profiles')
+                .upsert([{ id: 'default-profile', ...profileData, updated_at: new Date().toISOString() }], { onConflict: 'id' })
+                .select();
+
+            if (error) throw error;
+
+            if (data && data[0]) {
+                setSettingsMessage('تم حفظ الملف الشخصي بنجاح في قاعدة البيانات.', 'success');
+            }
+        } catch (error) {
+            console.error('فشل حفظ الملف الشخصي في Supabase:', error);
+            setSettingsMessage('تم حفظ البيانات محلياً؛ يرجى تشغيل الاستعلام SQL المتوفر في ملف supabase-profile-table.sql داخل Supabase.', 'info');
+        }
+    }
 
     // 1. التنقل عبر القائمة الجانبية
     navItems.forEach(item => {
         item.addEventListener('click', function() {
-            navItems.forEach(nav => nav.classList.remove('active'));
-            this.classList.add('active');
-
-            contentSections.forEach(section => {
-                section.classList.remove('active');
-            });
-
             const targetId = this.getAttribute('data-target');
-            const targetSection = document.getElementById(targetId);
-            
-            if(targetSection) {
-                targetSection.classList.add('active');
-                if(targetId === 'freedit-section') {
-                    if(contestMainView) contestMainView.style.display = 'block';
-                    if(freeditContestModal) freeditContestModal.style.display = 'none';
-                }
-            }
-
-            if (window.innerWidth <= 1024) {
-                const sidebar = document.getElementById('sidebarRight');
-                if(sidebar) sidebar.classList.remove('show');
-            }
+            showSection(targetId);
         });
     });
+
+    document.getElementById('btnViewPublicProfile')?.addEventListener('click', () => showSection('settings-section'));
+    document.getElementById('btnEditProfile')?.addEventListener('click', () => showSection('settings-section'));
+
+    if (profileSettingsForm) {
+        profileSettingsForm.addEventListener('submit', saveProfileData);
+    }
+
+    if (btnResetProfile) {
+        btnResetProfile.addEventListener('click', () => {
+            populateProfileForm({
+                profile_name: '',
+                profile_title: '',
+                profile_location: '',
+                profile_member_since: '',
+                profile_bio: '',
+                profile_image_url: ''
+            });
+            setProfilePreview({
+                profile_name: 'الاسم',
+                profile_title: 'مصمم جرافيك',
+                profile_location: '',
+                profile_member_since: '',
+                profile_bio: 'أحب تصميم الشعارات والهويات البصرية والتصاميم الإعلانية.',
+                profile_image_url: ''
+            });
+            setSettingsMessage('تم إعادة تعيين النموذج. يمكنك إدخال بيانات جديدة ثم الحفظ.', 'info');
+        });
+    }
+
+    loadProfileData();
 
     // 2. تفعيل زر "رفع ملف جديد" في الشريط العلوي
     const headerUploadBtn = document.querySelector('.header-upload-btn');
